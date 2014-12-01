@@ -8,11 +8,11 @@
 <body>
 	<layout>
 		<header>
-			<button type="" id="asides">Click for asides</button>
+			<button id="toggleasides">Click for asides</button>
 		</header>
-		<aside class="left" id="leftaside">Left</aside>
+		<aside class="left hide-mobile" id="leftaside">Left</aside>
 		<main id="mainhide"></main>
-		<aside class="right" id="rightaside">Right</aside>
+		<aside class="right hide-mobile" id="rightaside">Right</aside>
 		<footer></footer>
 	</layout>
 	<div class="overlay" id="over">
@@ -25,30 +25,13 @@
 	<script>
 		function overlay(){
 			document.getElementById('over').style.display='none';
-			}
-		document.getElementById('asides').onclick = function() {
-			if (
-				document.getElementById('leftaside').style.display=='block')
-			{
-			document.getElementById('leftaside').style.display=='none';
-			document.getElementById('rightaside').style.display=='none';}
-			else {
-			document.getElementById('leftaside').style.display='block';
-			document.getElementById('rightaside').style.display='block';
-			document.getElementById('mainhide').style.display='none'; }
 		}
-// function toggle(hide)
-//     {
-//     if (hide) {
-//        document.getElementById("leftaside").style.display="block";
-//             document.getElementById("rightaside").style.display="block";
-//        document.getElementById("asides").onclick = toggle(false);
-
-//     } else {
-//        document.getElementById("leftaside").style.display="block";
-//        document.getElementById("asides").onclick = toggle(true);
-//     }
-//    }
+		document.getElementById('toggleasides').onclick = function(){
+			// see more about toggle at http://stackoverflow.com/a/23105575
+			document.getElementById('leftaside').classList.toggle('hide-mobile');
+			document.getElementById('rightaside').classList.toggle('hide-mobile');
+			document.getElementById('mainhide').classList.toggle('hide-mobile');
+		}
 	</script>
 </body>
 </html>
