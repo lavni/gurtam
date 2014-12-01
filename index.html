@@ -27,11 +27,17 @@
 			document.getElementById('over').style.display='none';
 		}
 		document.getElementById('toggleasides').onclick = function(){
-			// see more about toggle at http://stackoverflow.com/a/23105575
-			document.getElementById('leftaside').classList.toggle('hide-mobile');
-			document.getElementById('rightaside').classList.toggle('hide-mobile');
-			document.getElementById('mainhide').classList.toggle('hide-mobile');
+			// // see more about toggle at http://stackoverflow.com/a/23105575
+			// document.getElementById('leftaside').classList.toggle('hide-mobile');
+			// document.getElementById('rightaside').classList.toggle('hide-mobile');
+			// document.getElementById('mainhide').classList.toggle('hide-mobile');
+
+			var elements = ['leftaside', 'rightaside', 'mainhide'];
+			for (var i = 0; i < elements.length; i++) {
+				document.getElementById(elements[i]).classList.toggle('hide-mobile');
+			};
 		}
+
 	</script>
 </body>
 </html>
