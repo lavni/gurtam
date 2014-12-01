@@ -10,9 +10,9 @@
 		<header>
 			<button type="" id="asides">Click for asides</button>
 		</header>
-		<aside class="left" id="leftaside"></aside>
+		<aside class="left" id="leftaside">Left</aside>
 		<main id="mainhide"></main>
-		<aside class="right" id="rightaside"></aside>
+		<aside class="right" id="rightaside">Right</aside>
 		<footer></footer>
 	</layout>
 	<div class="overlay" id="over">
@@ -23,7 +23,7 @@
 		</form>
 	</div>
 	<script>
-		function overlay(){	
+		function overlay(){
 			document.getElementById('over').style.display='none';
 			}
 		document.getElementById('asides').onclick = function() {
@@ -34,9 +34,9 @@
 			document.getElementById('rightaside').style.display=='none';}
 			else {
 			document.getElementById('leftaside').style.display='block';
-			document.getElementById('rightaside').style.display='block'; 
+			document.getElementById('rightaside').style.display='block';
 			document.getElementById('mainhide').style.display='none'; }
-		} 
+		}
 // function toggle(hide)
 //     {
 //     if (hide) {
