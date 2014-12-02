@@ -60,17 +60,17 @@ footer{
 .left{
 	left: 0;
 	top: 100px;
-	background: #1240AB;
+	background: #A68900;
 	width: 20%;
-	height: 71%;
+	height: 80%;
 	position: absolute;
 }
 .right{
 	right: 0;
 	top: 100px;
-	background: #1258AB;
+	background: #A64B00;
 	width: 20%;
-	height: 71%;
+	height: 80%;
 	position: absolute;
 }
 main{
@@ -78,7 +78,7 @@ main{
 	top: 100px;
 	background: #6C8CD5;
 	width: 60%;
-	height: 71%;
+	height: 80%;
 	position: absolute;
 }
 .overlay{
@@ -125,7 +125,7 @@ input:focus{
 	.left, .right, main{
 		position: static;
 		width: 100%;
-		height: 36%;
+		height: 40%;
 	}
 	header, footer{
 		position: fixed;
