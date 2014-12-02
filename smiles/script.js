@@ -12,16 +12,6 @@ function setIcon(i){
   elem.style.backgroundPosition = x + "px " + y + "px";
 }
 
-
-
-// leftButton = document.getElementById("left");
-// leftButton.onclick = function() {
-//   var ind =  document.getElementById("icon").getAttribute("ind");
-//   ind--;
-//   setIcon(ind);
-//   document.getElementById("icon").setAttribute("ind", ind);
-// };
-
 function leftClick(){
   var ind =  document.getElementById("icon").getAttribute("ind");
   ind--;
