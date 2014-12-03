@@ -1,16 +1,38 @@
+var session = wialon.core.Session.getInstance();
+	session.initSession('https://trc-api.wialon.com')
+
+
 //form
 function overlay(){
+	
+	
 	var login = document.forms["myForm"]["login"].value;
 	var pass = document.forms["myForm"]["pass"].value;
-		if ((login == "avin") && (pass == "avin")) {
-			setTimeout(function(){
+	verification(login, pass);
+		
+}
+function verification(log, pas){
+	session.login(log, pas, '', function(code){
+			if (code == 0) {
+			var currUser = session.getCurrUser().getName();	
 			document.getElementById('over').style.display = 'none';
-			document.getElementById('hello').innerText = 'HELLO AVIN!';
-			}, 1000);
+			document.getElementById('hello').style.display = 'block';
+			document.getElementById('logout').style.display = 'block';
+			document.getElementById('hello').innerText = 'HELLO ' + currUser;
+			afterLog();
 		} else{
-			setTimeout(function(){alert("Invalid login "+login);
-			}, 1000);
-	}
+			alert("Invalid login "+log);
+			}
+		console.log(arguments);
+	});
+	
+}
+function logout(){
+	document.getElementById('over').style.display = 'block';
+	document.getElementById('hello').style.display = 'none';
+	document.getElementById('logout').style.display = 'none';
+	document.getElementById('hello').innerText = '';
+	document.forms["myForm"]["pass"].value = '';
 }
 
 //toggle asides for mobile
@@ -21,6 +43,18 @@ document.getElementById('toggleasides').onclick = function(){
 	};
 }
 
+function afterLog() {
+	session.loadLibrary('itemIcon');
+	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x411, mode:0}], 
+		function(code){
+			var objects = session.getItems('avl_unit');
+			for (var i = 0; i < objects.length; i++) {
+			document.getElementById('itemlist').innerHTML += "<li><img src='" + objects[i].getIconUrl() + "'>" + objects[i].getName() + " </li>" ;
+		};
+	});
+}
+
+
 
 function fact(a){
 	var sum = 1;
@@ -29,3 +63,10 @@ function fact(a){
 	};
 	return sum;
 }
+
+
+//http://trc-api.wialon.com/wialon/ajax.html?svc=core/login&params={%22user%22:%22avin%22,%22password%22:%22123%22}
+//http://trc-api.wialon.com/wialon/ajax.html?sid=c1f48e7956e52331c452f94bcf5e3fb7&svc=core/logout&params={}
+// session.updateDataFlags([{type:'type', data: 'avl_unit', flags:1, mode:0}], function(code){console.log(arguments)})
+// session.getItems('avl_unit')
+

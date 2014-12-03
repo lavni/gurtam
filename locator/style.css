@@ -1,8 +1,13 @@
+body{
+	height: 100%;
+}
+
 layout{
 		position: absolute;
 		height:100%;
 		width: 100%;
 		font-family: Verdana, sans-serif;
+		overflow: hidden;
 
 	}
 header{
@@ -24,18 +29,21 @@ footer{
 .left{
 	left: 0;
 	top: 100px;
-	background: #AC603B;
-	width: 20%;
-	height: 80%;
-	position: absolute;
-}
-.right{
-	right: 0;
-	top: 100px;
 	background: #EF9063;
 	width: 20%;
 	height: 80%;
 	position: absolute;
+	overflow: hidden;
+	padding: 10px;
+}
+.right{
+	right: 0;
+	top: 100px;
+	background: #AC603B;
+	width: 20%;
+	height: 80%;
+	position: absolute;
+	overflow: hidden;
 }
 main{
 	left: 20%;
@@ -111,13 +119,23 @@ input:focus{
 	}
 	.hide-mobile{
 		display: none;
+
 	}
 }
 
-.hello{
+.hello, .logout{
 	position: absolute;
 	right: 10px;
 	top: 10px;
 	background: #EF9063;
 	padding: 5px;
+	border: none;
+	cursor: pointer;
+	display: none;
+}
+.hello{
+	text-transform: uppercase;
+}
+.logout{
+	top: 40px;
 }
