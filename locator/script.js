@@ -5,7 +5,7 @@ function overlay(){
 		if ((login == "avin") && (pass == "avin")) {
 			setTimeout(function(){
 			document.getElementById('over').style.display = 'none';
-			document.getElementById('header').innerText = 'HELLO AVIN!';
+			document.getElementById('hello').innerText = 'HELLO AVIN!';
 			}, 1000);
 		} else{
 			setTimeout(function(){alert("Invalid login "+login);

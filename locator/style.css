@@ -1,52 +1,16 @@
-html,body,div,span,object,iframe,
-h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,
-cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,
-sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,
-legend,table,caption,tbody,tfoot,thead,tr,th,td,
-article,aside,canvas,details,figcaption,figure,
-footer,header,menu,nav,section,summary,time,mark,
-audio,video{margin:0;padding:0;border:0;outline:0;
-font-size:100%;vertical-align:baseline;
-background:transparent;}body{line-height:1;}
-article,aside,details,figcaption,figure,footer,
-header,menu,nav,section{display:block;}
-nav ul{list-style:none;}
-blockquote,q{quotes:none;}
-blockquote::before,blockquote::after,q::before,
-q::after{content:'';content:none;}
-a{margin:0;padding:0;font-size:100%;
-vertical-align:baseline;background:transparent;}
-ins{background-color:#ff9;color:#000;
-text-decoration:none;}
-mark{background-color:#ff9;color:#000;
-font-style:italic;font-weight:bold;}
-del{text-decoration:line-through;}
-abbr[title],dfn[title]
-{border-bottom:1px dotted;cursor:help;}
-table{border-collapse:collapse;
-border-spacing:0;}
-hr{display:block;height:1px;
-border:0;border-top:1px solid #cccccc;margin:1em 0;padding:0;}
-input,select{vertical-align:middle;}
-
-
-*{
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-	layout{
+layout{
 		position: absolute;
 		height:100%;
 		width: 100%;
+		font-family: Verdana, sans-serif;
+
 	}
 header{
 	position: absolute;
 	left: 0;
 	right: 0;
 	top: 0;
-	background: #06266F;
+	background: #0C4D36;
 	height: 100px;
 }
 footer{
@@ -54,13 +18,13 @@ footer{
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: #06266F;
+	background: #0C4D36;
 	height: 100px;
 }
 .left{
 	left: 0;
 	top: 100px;
-	background: #A68900;
+	background: #AC603B;
 	width: 20%;
 	height: 80%;
 	position: absolute;
@@ -68,7 +32,7 @@ footer{
 .right{
 	right: 0;
 	top: 100px;
-	background: #A64B00;
+	background: #EF9063;
 	width: 20%;
 	height: 80%;
 	position: absolute;
@@ -76,7 +40,7 @@ footer{
 main{
 	left: 20%;
 	top: 100px;
-	background: #6C8CD5;
+	background: #88C4AF;
 	width: 60%;
 	height: 80%;
 	position: absolute;
@@ -121,6 +85,12 @@ input:focus{
 @media screen and (max-width: 480px){
 	#toggleasides{
 		display: block;
+		background: #EF9063;
+		border: none;
+		margin: 10px;
+		padding: 6px;
+		cursor: pointer;
+		font-family: Verdana, sans-serif;;
 	}
 	.left, .right, main{
 		position: static;
@@ -142,4 +112,12 @@ input:focus{
 	.hide-mobile{
 		display: none;
 	}
+}
+
+.hello{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	background: #EF9063;
+	padding: 5px;
 }
