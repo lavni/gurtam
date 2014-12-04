@@ -54,18 +54,21 @@ function afterLog() {
 					+ "</span><span><h2>Last message: </h2>none</span></li>";
 				} else{
 					var data = objects[i].getLastMessage().t;
+					var x = objects[i].getLastMessage().pos.x ;
+					var y = objects[i].getLastMessage().pos.y;
 					document.getElementById('itemlist').innerHTML +=
 					"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
 					+ "</span> <span><h2>Last message: </h2></span>" +
 					"<span>" + convertTime(data) + "</span>" +  " " +
 					"<span>" + objects[i].getLastMessage().pos.s + " kmph </span>" + " " +
-					"<span> x: " + objects[i].getLastMessage().pos.x + " <br>y: " + 
-					objects[i].getLastMessage().pos.y + "</span>" + " </li>";
+					"<span> x: " + x + " <br>y: " + y 
+					 + "</span>" + " </li>";
+					map(x,y);
 				};
 			};
 		}
 	);
-	map();
+
 }
 
 function convertTime(time){
@@ -76,19 +79,26 @@ var day = date.getDay();
 var hours = date.getHours();
 var minutes = "0" + date.getMinutes();
 var seconds = "0" + date.getSeconds();
-// display time in 10:30:23 format
 var formattedTime = day + "/" + (month+1) + "/" + (year%100) + " " + hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 return formattedTime;
 }
 
-function map(){
+function map(y,x){
 	var map = L.map('map');
-	
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-	var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});	
-	map.setView([51.505, -0.09], 13);
+	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});	
+	//map.setView([53.906, 27.456], 13);
 	map.addLayer(osm);
+	markers = [[53.906, 27.456], [53.906, 26.456],[53.306, 26.456]];
+	for (var i = 0; i < markers.length; i++) {
+		var marker = L.marker(markers[i]).addTo(map);
+	};
+	// var marker1 = L.marker([53.906, 27.456]).addTo(map);
+	// var marker2 = L.marker([53.906, 26.456]).addTo(map);
+	// var marker3 = L.marker([53.306, 26.456]).addTo(map);
+	map.fitBounds(markers);
+	// extend(fitBounds);
 }
 
 // function fact(a){

@@ -29,28 +29,26 @@ footer{
 .left{
 	left: 0;
 	top: 100px;
+	bottom: 100px;
 	background: #EF9063;
 	width: 20%;
-	height: 80%;
 	position: absolute;
-	overflow: hidden;
 	padding: 10px;
 }
 .right{
 	right: 0;
 	top: 100px;
+	bottom: 100px;
 	background: #AC603B;
 	width: 20%;
-	height: 80%;
 	position: absolute;
-	overflow: hidden;
 }
 main{
 	left: 20%;
 	top: 100px;
+	bottom: 100px;
 	background: #88C4AF;
 	width: 60%;
-	height: 80%;
 	position: absolute;
 }
 .overlay{
@@ -119,7 +117,6 @@ input:focus{
 	}
 	.hide-mobile{
 		display: none;
-
 	}
 }
 
@@ -161,6 +158,6 @@ input:focus{
 	width: 100%;
 }
 .map{
-	position: absolute;
+	position: relative;
 	height: 100%;
 }
