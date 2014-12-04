@@ -47,35 +47,31 @@ function afterLog() {
 		function(code){
 			var objects = session.getItems('avl_unit');
 			for (var i = 0; i < objects.length; i++) {
+
 				if (objects[i].getLastMessage() == null) {
 					document.getElementById('itemlist').innerHTML +=
-					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span><span>Last message: none</span></li>";
+					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span><span><h2>Last message: </h2>none</span></li>";
 				} else{
+					var data = objects[i].getLastMessage().t;
 					document.getElementById('itemlist').innerHTML +=
-					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span> " +
-					"<span>" + objects[i].getLastMessage().t + "</span>" +  " " +
-					"<span>" + objects[i].getLastMessage().pos.x + " " + objects[i].getLastMessage().pos.y + "</span>" +  " " +
-					"<span>" + objects[i].getLastMessage().pos.s + " kmph </span>" +	" </li>";
+					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span> <span><h2>Last message: </h2></span>" +
+					"<span>" + convertTime(data) + "</span>" +  " " +
+					"<span>" + objects[i].getLastMessage().pos.s + " kmph </span>" + " " +
+					"<span>x: " + objects[i].getLastMessage().pos.x + " <br>y: " + objects[i].getLastMessage().pos.y + "</span>" + " </li>";
 				};
 			};
 		}
 	);
 }
 
-function convertTime(){
-	// create a new javascript Date object based on the timestamp
-// multiplied by 1000 so that the argument is in milliseconds, not seconds
-
-var date = new Date(unix_timestamp*1000);
-// hours part from the timestamp
+function convertTime(time){
+var date = new Date(time*1000);
 var hours = date.getHours();
-// minutes part from the timestamp
 var minutes = "0" + date.getMinutes();
-// seconds part from the timestamp
 var seconds = "0" + date.getSeconds();
-
-// will display time in 10:30:23 format
+// display time in 10:30:23 format
 var formattedTime = hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
+return formattedTime;
 }
 
 
