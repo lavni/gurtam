@@ -137,7 +137,11 @@ input:focus{
 	top: 40px;
 }
 .itemlist li{
-	padding: 15px 0 0 0;
+	padding: 5px 5px;
+	cursor: pointer;
+}
+.itemlist li:hover{
+	box-shadow: 0 0 0 1px black;
 }
 .itemlist li span{
 	display: block;

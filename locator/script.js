@@ -42,65 +42,83 @@ document.getElementById('toggleasides').onclick = function(){
 }
 
 function afterLog() {
+	
 	session.loadLibrary('itemIcon');
-	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x1411, mode:0}],
-		function(code){
-			var objects = session.getItems('avl_unit');
-			for (var i = 0; i < objects.length; i++) {
-
-				if (objects[i].getLastMessage() == null) {
-					document.getElementById('itemlist').innerHTML +=
-					"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
-					+ "</span><span><h2>Last message: </h2>none</span></li>";
-				} else{
-					var data = objects[i].getLastMessage().t;
-					var x = objects[i].getLastMessage().pos.x ;
-					var y = objects[i].getLastMessage().pos.y;
-					document.getElementById('itemlist').innerHTML +=
-					"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
-					+ "</span> <span><h2>Last message: </h2></span>" +
-					"<span>" + convertTime(data) + "</span>" +  " " +
-					"<span>" + objects[i].getLastMessage().pos.s + " kmph </span>" + " " +
-					"<span> x: " + x + " <br>y: " + y 
-					 + "</span>" + " </li>";
-					map(x,y);
-				};
-			};
+	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x1411, mode:0}], function(code){
+		var objects = session.getItems('avl_unit');
+		var markers = [];
+		var names = [];
+		for (var i = 0; i < objects.length; i++) {
+			if (objects[i].getLastMessage() == null) {
+				document.getElementById('itemlist').innerHTML +=
+				"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
+				+ "</span><span><h2>Last message: </h2>none</span></li>";
+			} else{
+				var data = objects[i].getLastMessage().t;
+				var x = objects[i].getLastMessage().pos.x ;
+				var y = objects[i].getLastMessage().pos.y;
+				var id = objects[i].getId();
+				var name = objects[i].getName() 
+				document.getElementById('itemlist').innerHTML += "<li class='unit_" + id + "'><img src='" + 
+				objects[i].getIconUrl() + "'><span> " + name + "</span> <span><h2>Last message: </h2></span>" +	
+				"<span>" + convertTime(data) + "</span>" +  " " + "<span>" + objects[i].getLastMessage().pos.s + " kmph </span>"
+				 + " " + "<span> x: " + x + " <br>y: " + y + "</span>" + " </li>";
+				markers.push([y, x]);
+				names.push(name);
+			}
 		}
-	);
+		map(markers, names);
+		// var elem = document.getElementById("itemlist");
+		// elem.addEventListener('click', function(event){
+		// 	var target = elem.target;
+		// 	var unit = 'unit_' + id;
+		// 	if (target.hasAttribute('unit')) {
 
+		// 		map.setView(y, x, 13);
+		// 	} 
+		//});
+	});
 }
 
 function convertTime(time){
-var date = new Date(time*1000);
-var year = date.getYear();
-var month = date.getMonth();
-var day = date.getDay();
-var hours = date.getHours();
-var minutes = "0" + date.getMinutes();
-var seconds = "0" + date.getSeconds();
-var formattedTime = day + "/" + (month+1) + "/" + (year%100) + " " + hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
-return formattedTime;
+	var date = new Date(time*1000);
+	var year = date.getYear();
+	var month = date.getMonth();
+	var day = date.getDay();
+	var hours = date.getHours();
+	var minutes = "0" + date.getMinutes();
+	var seconds = "0" + date.getSeconds();
+	var formattedTime = day + "/" + (month+1) + "/" + (year%100) + " " +
+	hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
+	return formattedTime;
 }
 
-function map(y,x){
+function map(markers, names){
 	var map = L.map('map');
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});	
 	//map.setView([53.906, 27.456], 13);
 	map.addLayer(osm);
-	markers = [[53.906, 27.456], [53.906, 26.456],[53.306, 26.456]];
+	// markers = [[53.906, 27.456], [53.906, 26.456],[53.306, 26.456]];
 	for (var i = 0; i < markers.length; i++) {
 		var marker = L.marker(markers[i]).addTo(map);
+		marker.bindPopup(names[i]);
 	};
-	// var marker1 = L.marker([53.906, 27.456]).addTo(map);
-	// var marker2 = L.marker([53.906, 26.456]).addTo(map);
-	// var marker3 = L.marker([53.306, 26.456]).addTo(map);
 	map.fitBounds(markers);
 	// extend(fitBounds);
 }
 
+function center(id, y, x){
+	var elem = document.getElementById("itemlist");
+	elem.addEventListener('click', function(event){
+		var target = elem.target;
+		unit = "unit_" + id;
+		if (target.hasAttribute(unit)) {
+			map.setView(x, y, 13);
+		} 
+	});
+}
 // function fact(a){
 // 	var sum = 1;
 // 	for (var i = 1; i <= a; i++) {
