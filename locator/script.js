@@ -1,6 +1,7 @@
 var session = wialon.core.Session.getInstance();
 	session.initSession('https://trc-api.wialon.com');
 
+var map = L.map('map');
 
 //form
 function overlay(){
@@ -42,7 +43,7 @@ document.getElementById('toggleasides').onclick = function(){
 }
 
 function afterLog() {
-
+	document.getElementById('h1').innerHTML += "<h1>Objects:</h1>";
 	session.loadLibrary('itemIcon');
 	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x1411, mode:0}], function(code){
 		var objects = session.getItems('avl_unit');
@@ -51,7 +52,6 @@ function afterLog() {
 		var datatimes = [];
 		var speeds = [];
 		var urls = [];
-		var id
 		for (var i = 0; i < objects.length; i++) {
 			if (objects[i].getLastMessage() == null) {
 				document.getElementById('itemlist').innerHTML +=
@@ -66,10 +66,10 @@ function afterLog() {
 				var datatime = convertTime(data);
 				var speed = objects[i].getLastMessage().pos.s;
 				var url = objects[i].getIconUrl();
-				document.getElementById('itemlist').innerHTML += "<li class='unit_" + id + "'><img src='" +
+				document.getElementById('itemlist').innerHTML += "<li data-x='" + x + "' data-y='" + y + "'><img src='" +
 				url + "'><span> " + name + "</span> <span><h2>Last message: </h2></span>" +
 				"<span>" + datatime + "</span>" +  " " + "<span>" + speed + " km/h </span>"
-				 + " " + "<span> x: " + x + " <br>y: " + y + "</span>" + " </li>";
+				 + " " + "<span class='little'> x: " + x + " <br>y: " + y + "</span>" + " </li>";
 				markers.push([y, x]);
 				names.push(name);
 				datatimes.push(datatime);
@@ -77,7 +77,8 @@ function afterLog() {
 				urls.push(url);
 			}
 		}
-		map(markers, names, datatimes, speeds, urls);
+		setupMap(markers, names, datatimes, speeds, urls);
+		setupClickItemHandler();
 	});
 }
 
@@ -94,8 +95,7 @@ function convertTime(time){
 	return formattedTime;
 }
 
-function map(markers, names, datatimes, speeds, urls){
-	var map = L.map('map');
+function setupMap(markers, names, datatimes, speeds, urls){
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
@@ -112,15 +112,19 @@ function map(markers, names, datatimes, speeds, urls){
 	// extend(fitBounds);
 }
 
-function center(id, y, x){
-	var elem = document.getElementById("itemlist");
-	elem.addEventListener('click', function(event){
-		var target = elem.target;
-		unit = "unit_" + id;
-		if (target.hasAttribute(unit)) {
-			map.setView(x, y, 13);
+function setupClickItemHandler() {
+	var elem = document.getElementById('itemlist');
+	elem.addEventListener('click', function(event) {
+		item = event.target;
+		while (item.tagName != 'LI') {
+			item = item.parentElement;
+		}
+		if (item.hasAttributes('data-x')) {
+			data = item.dataset;
+			map.setView([data.y, data.x], 15);
 		}
 	});
+
 }
 // function fact(a){
 // 	var sum = 1;

@@ -17,6 +17,8 @@ header{
 	top: 0;
 	background: #0C4D36;
 	height: 80px;
+	box-shadow:  0 0 2px 1px #0C4D36;
+	z-index:2;
 }
 footer{
 	position: absolute;
@@ -25,6 +27,8 @@ footer{
 	bottom: 0;
 	background: #0C4D36;
 	height: 80px;
+	box-shadow:  0 0 2px 1px #0C4D36;
+	z-index:2;
 }
 .left{
 	left: 0;
@@ -35,6 +39,8 @@ footer{
 	position: absolute;
 	padding: 10px;
 	overflow: auto;
+	box-shadow:  0 0 2px 1px #0C4D36;
+	z-index:1;
 }
 .right{
 	right: 0;
@@ -44,14 +50,16 @@ footer{
 	width: 15%;
 	position: absolute;
 	overflow:auto;
+	padding: 10px;
+	box-shadow:  0 0 2px 1px #0C4D36;
 }
 main{
 	left: 20%;
-	top: 80px;
 	bottom: 80px;
 	background: #88C4AF;
 	width: 65%;
 	position: absolute;
+	top: 80px;
 }
 .overlay{
 	position: fixed;
@@ -113,8 +121,9 @@ input:focus{
 	}
 	.right{
 		margin-bottom: 80px;
+		box-shadow:  0 0 2px 1px #0C4D36;
 	}
-	main{
+	main, .map{
 		height: 100%;
 		position: absolute;
 		left:0;
@@ -141,12 +150,15 @@ input:focus{
 	top: 40px;
 	cursor: pointer;
 }
+.left h1{
+	margin-bottom: 5px;
+}
 .itemlist li{
-	padding: 5px 5px;
+	padding: 5px 10px;
 	cursor: pointer;
 }
 .itemlist li:hover{
-	box-shadow: 0 0 0 1px black;
+	background: rgba(239, 144, 99, .5);
 }
 .itemlist li span{
 	display: block;
@@ -157,9 +169,14 @@ input:focus{
 	font-size: 16px;
 	display: inline-block;
 }
+.itemlist li span.little{
+	font-size:10px;
+}
 .itemlist li img{
 	display: inline-block;
 	margin: 0 5px 0 0;
+	position: relative;
+	top: 5px;
 }
 .fullscreen{
 	position: absolute;
