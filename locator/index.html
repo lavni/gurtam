@@ -4,6 +4,7 @@
 	<title>Locator</title>
 	<link rel="stylesheet" href="reset_css.css">
 	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 </head>
 <body>
@@ -18,7 +19,9 @@
 			<ul id="itemlist" class="itemlist">
 			</ul>
 		</aside>
-		<main id="mainhide"></main>
+		<main id="mainhide">
+			<div class="map" id="map"></div>
+		</main>
 		<aside class="right hide-mobile" id="rightaside">Right</aside>
 		<footer></footer>
 	</layout>
@@ -30,6 +33,7 @@
 		</form>
 	</div>
 	<script src="https://trc-api.wialon.com/wsdk/script/wialon.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 	<script src="script.js"></script>
 </body>
 </html>

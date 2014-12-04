@@ -50,43 +50,60 @@ function afterLog() {
 
 				if (objects[i].getLastMessage() == null) {
 					document.getElementById('itemlist').innerHTML +=
-					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span><span><h2>Last message: </h2>none</span></li>";
+					"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
+					+ "</span><span><h2>Last message: </h2>none</span></li>";
 				} else{
 					var data = objects[i].getLastMessage().t;
 					document.getElementById('itemlist').innerHTML +=
-					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span> <span><h2>Last message: </h2></span>" +
+					"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
+					+ "</span> <span><h2>Last message: </h2></span>" +
 					"<span>" + convertTime(data) + "</span>" +  " " +
 					"<span>" + objects[i].getLastMessage().pos.s + " kmph </span>" + " " +
-					"<span>x: " + objects[i].getLastMessage().pos.x + " <br>y: " + objects[i].getLastMessage().pos.y + "</span>" + " </li>";
+					"<span> x: " + objects[i].getLastMessage().pos.x + " <br>y: " + 
+					objects[i].getLastMessage().pos.y + "</span>" + " </li>";
 				};
 			};
 		}
 	);
+	map();
 }
 
 function convertTime(time){
 var date = new Date(time*1000);
+var year = date.getYear();
+var month = date.getMonth();
+var day = date.getDay();
 var hours = date.getHours();
 var minutes = "0" + date.getMinutes();
 var seconds = "0" + date.getSeconds();
 // display time in 10:30:23 format
-var formattedTime = hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
+var formattedTime = day + "/" + (month+1) + "/" + (year%100) + " " + hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 return formattedTime;
 }
 
-
-
-function fact(a){
-	var sum = 1;
-	for (var i = 1; i <= a; i++) {
-		sum *= i;
-	};
-	return sum;
+function map(){
+	var map = L.map('map');
+	
+	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+	var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});	
+	map.setView([51.505, -0.09], 13);
+	map.addLayer(osm);
 }
+
+// function fact(a){
+// 	var sum = 1;
+// 	for (var i = 1; i <= a; i++) {
+// 		sum *= i;
+// 	};
+// 	return sum;
+// }
 
 
 //http://trc-api.wialon.com/wialon/ajax.html?svc=core/login&params={%22user%22:%22avin%22,%22password%22:%22123%22}
 //http://trc-api.wialon.com/wialon/ajax.html?sid=c1f48e7956e52331c452f94bcf5e3fb7&svc=core/logout&params={}
 // session.updateDataFlags([{type:'type', data: 'avl_unit', flags:1, mode:0}], function(code){console.log(arguments)})
 // session.getItems('avl_unit')
+
+
 
