@@ -16,7 +16,7 @@ header{
 	right: 0;
 	top: 0;
 	background: #0C4D36;
-	height: 100px;
+	height: 80px;
 }
 footer{
 	position: absolute;
@@ -24,31 +24,33 @@ footer{
 	right: 0;
 	bottom: 0;
 	background: #0C4D36;
-	height: 100px;
+	height: 80px;
 }
 .left{
 	left: 0;
-	top: 100px;
-	bottom: 100px;
-	background: #EF9063;
+	top: 80px;
+	bottom: 80px;
+	background: #74AE9A;
 	width: 20%;
 	position: absolute;
 	padding: 10px;
+	overflow: auto;
 }
 .right{
 	right: 0;
-	top: 100px;
-	bottom: 100px;
-	background: #AC603B;
-	width: 20%;
+	top: 80px;
+	bottom: 80px;
+	background: #74AE9A;
+	width: 15%;
 	position: absolute;
+	overflow:auto;
 }
 main{
 	left: 20%;
-	top: 100px;
-	bottom: 100px;
+	top: 80px;
+	bottom: 80px;
 	background: #88C4AF;
-	width: 60%;
+	width: 65%;
 	position: absolute;
 }
 .overlay{
@@ -107,13 +109,16 @@ input:focus{
 		position: fixed;
 	}
 	.left{
-		margin-top:100px;
+		margin-top:80px;
 	}
 	.right{
 		margin-bottom: 80px;
 	}
 	main{
 		height: 100%;
+		position: absolute;
+		left:0;
+		right: 0;
 	}
 	.hide-mobile{
 		display: none;
@@ -127,7 +132,6 @@ input:focus{
 	background: #EF9063;
 	padding: 5px;
 	border: none;
-	cursor: pointer;
 	display: none;
 }
 .hello{
@@ -135,6 +139,7 @@ input:focus{
 }
 .logout{
 	top: 40px;
+	cursor: pointer;
 }
 .itemlist li{
 	padding: 5px 5px;

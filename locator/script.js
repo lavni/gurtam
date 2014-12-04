@@ -42,41 +42,42 @@ document.getElementById('toggleasides').onclick = function(){
 }
 
 function afterLog() {
-	
+
 	session.loadLibrary('itemIcon');
 	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x1411, mode:0}], function(code){
 		var objects = session.getItems('avl_unit');
 		var markers = [];
 		var names = [];
+		var datatimes = [];
+		var speeds = [];
+		var urls = [];
+		var id
 		for (var i = 0; i < objects.length; i++) {
 			if (objects[i].getLastMessage() == null) {
 				document.getElementById('itemlist').innerHTML +=
-				"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName() 
+				"<li><img src='" + objects[i].getIconUrl() + "'><span> " + objects[i].getName()
 				+ "</span><span><h2>Last message: </h2>none</span></li>";
 			} else{
 				var data = objects[i].getLastMessage().t;
 				var x = objects[i].getLastMessage().pos.x ;
 				var y = objects[i].getLastMessage().pos.y;
 				var id = objects[i].getId();
-				var name = objects[i].getName() 
-				document.getElementById('itemlist').innerHTML += "<li class='unit_" + id + "'><img src='" + 
-				objects[i].getIconUrl() + "'><span> " + name + "</span> <span><h2>Last message: </h2></span>" +	
-				"<span>" + convertTime(data) + "</span>" +  " " + "<span>" + objects[i].getLastMessage().pos.s + " kmph </span>"
+				var name = objects[i].getName()
+				var datatime = convertTime(data);
+				var speed = objects[i].getLastMessage().pos.s;
+				var url = objects[i].getIconUrl();
+				document.getElementById('itemlist').innerHTML += "<li class='unit_" + id + "'><img src='" +
+				url + "'><span> " + name + "</span> <span><h2>Last message: </h2></span>" +
+				"<span>" + datatime + "</span>" +  " " + "<span>" + speed + " km/h </span>"
 				 + " " + "<span> x: " + x + " <br>y: " + y + "</span>" + " </li>";
 				markers.push([y, x]);
 				names.push(name);
+				datatimes.push(datatime);
+				speeds.push(speed);
+				urls.push(url);
 			}
 		}
-		map(markers, names);
-		// var elem = document.getElementById("itemlist");
-		// elem.addEventListener('click', function(event){
-		// 	var target = elem.target;
-		// 	var unit = 'unit_' + id;
-		// 	if (target.hasAttribute('unit')) {
-
-		// 		map.setView(y, x, 13);
-		// 	} 
-		//});
+		map(markers, names, datatimes, speeds, urls);
 	});
 }
 
@@ -93,17 +94,19 @@ function convertTime(time){
 	return formattedTime;
 }
 
-function map(markers, names){
+function map(markers, names, datatimes, speeds, urls){
 	var map = L.map('map');
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});	
+	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
 	//map.setView([53.906, 27.456], 13);
 	map.addLayer(osm);
 	// markers = [[53.906, 27.456], [53.906, 26.456],[53.306, 26.456]];
 	for (var i = 0; i < markers.length; i++) {
-		var marker = L.marker(markers[i]).addTo(map);
-		marker.bindPopup(names[i]);
+		var icon = L.icon({iconUrl: urls[i], popupAnchor: [15, 0]});
+		var marker = L.marker(markers[i], {icon: icon}).addTo(map);
+		marker.bindPopup("<b>Name:</b> " + names[i] + "<br><b>Speed:</b> " + speeds[i] +
+			" km/h <br><b>Last:</b> " + datatimes[i]);
 	};
 	map.fitBounds(markers);
 	// extend(fitBounds);
@@ -116,7 +119,7 @@ function center(id, y, x){
 		unit = "unit_" + id;
 		if (target.hasAttribute(unit)) {
 			map.setView(x, y, 13);
-		} 
+		}
 	});
 }
 // function fact(a){
