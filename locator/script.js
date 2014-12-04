@@ -1,31 +1,29 @@
 var session = wialon.core.Session.getInstance();
-	session.initSession('https://trc-api.wialon.com')
+	session.initSession('https://trc-api.wialon.com');
 
 
 //form
 function overlay(){
-	
-	
 	var login = document.forms["myForm"]["login"].value;
 	var pass = document.forms["myForm"]["pass"].value;
 	verification(login, pass);
-		
+
 }
 function verification(log, pas){
 	session.login(log, pas, '', function(code){
-			if (code == 0) {
-			var currUser = session.getCurrUser().getName();	
+		if (code == 0) {
+			var currUser = session.getCurrUser().getName();
 			document.getElementById('over').style.display = 'none';
 			document.getElementById('hello').style.display = 'block';
 			document.getElementById('logout').style.display = 'block';
 			document.getElementById('hello').innerText = 'HELLO ' + currUser;
 			afterLog();
-		} else{
+		} else {
 			alert("Invalid login "+log);
-			}
+		}
 		console.log(arguments);
 	});
-	
+
 }
 function logout(){
 	document.getElementById('over').style.display = 'block';
@@ -45,13 +43,39 @@ document.getElementById('toggleasides').onclick = function(){
 
 function afterLog() {
 	session.loadLibrary('itemIcon');
-	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x411, mode:0}], 
+	session.updateDataFlags([{type:'type', data: 'avl_unit', flags:0x1411, mode:0}],
 		function(code){
 			var objects = session.getItems('avl_unit');
 			for (var i = 0; i < objects.length; i++) {
-			document.getElementById('itemlist').innerHTML += "<li><img src='" + objects[i].getIconUrl() + "'>" + objects[i].getName() + " </li>" ;
-		};
-	});
+				if (objects[i].getLastMessage() == null) {
+					document.getElementById('itemlist').innerHTML +=
+					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span><span>Last message: none</span></li>";
+				} else{
+					document.getElementById('itemlist').innerHTML +=
+					"<li><img src='" + objects[i].getIconUrl() + "'><span>" + objects[i].getName() + "</span> " +
+					"<span>" + objects[i].getLastMessage().t + "</span>" +  " " +
+					"<span>" + objects[i].getLastMessage().pos.x + " " + objects[i].getLastMessage().pos.y + "</span>" +  " " +
+					"<span>" + objects[i].getLastMessage().pos.s + " kmph </span>" +	" </li>";
+				};
+			};
+		}
+	);
+}
+
+function convertTime(){
+	// create a new javascript Date object based on the timestamp
+// multiplied by 1000 so that the argument is in milliseconds, not seconds
+
+var date = new Date(unix_timestamp*1000);
+// hours part from the timestamp
+var hours = date.getHours();
+// minutes part from the timestamp
+var minutes = "0" + date.getMinutes();
+// seconds part from the timestamp
+var seconds = "0" + date.getSeconds();
+
+// will display time in 10:30:23 format
+var formattedTime = hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 }
 
 
