@@ -2,15 +2,15 @@ var session = wialon.core.Session.getInstance();
 	session.initSession('https://trc-api.wialon.com');
 
 var map = L.map('map');
-
+var MARKERS = {};
 //form
 function overlay(){
 	var login = document.forms["myForm"]["login"].value;
 	var pass = document.forms["myForm"]["pass"].value;
 	verification(login, pass);
-
 }
 function verification(log, pas){
+	session.initSession('https://trc-api.wialon.com');
 	session.login(log, pas, '', function(code){
 		if (code == 0) {
 			var currUser = session.getCurrUser().getName();
@@ -24,7 +24,6 @@ function verification(log, pas){
 		}
 		console.log(arguments);
 	});
-
 }
 function logout(){
 	document.getElementById('over').style.display = 'block';
@@ -32,8 +31,8 @@ function logout(){
 	document.getElementById('logout').style.display = 'none';
 	document.getElementById('hello').innerText = '';
 	document.forms["myForm"]["pass"].value = '';
-}
 
+}
 //toggle asides for mobile
 document.getElementById('toggleasides').onclick = function(){
 	var elements = ['leftaside', 'rightaside', 'mainhide'];
@@ -52,6 +51,7 @@ function afterLog() {
 		var datatimes = [];
 		var speeds = [];
 		var urls = [];
+		var info = {};
 		for (var i = 0; i < objects.length; i++) {
 			if (objects[i].getLastMessage() == null) {
 				document.getElementById('itemlist').innerHTML +=
@@ -67,18 +67,23 @@ function afterLog() {
 				var speed = objects[i].getLastMessage().pos.s;
 				var url = objects[i].getIconUrl();
 				document.getElementById('itemlist').innerHTML += "<li data-x='" + x + "' data-y='" + y + "'><img src='" +
-				url + "'><span> " + name + "</span> <span><h2>Last message: </h2></span>" +
-				"<span>" + datatime + "</span>" +  " " + "<span>" + speed + " km/h </span>"
+				url + "'><span> " + name + "</span> <span><h2 >Last message: </h2></span><span id='last" + id + "'></span>" +
+				"<span id='lastt" + id + "'>" + datatime + "</span>" +  " " + "<span>" + speed + " km/h </span>"
 				 + " " + "<span class='little'> x: " + x + " <br>y: " + y + "</span>" + " </li>";
-				markers.push([y, x]);
-				names.push(name);
-				datatimes.push(datatime);
-				speeds.push(speed);
-				urls.push(url);
+				info[id] = {
+					marker: [y, x],
+					name: name,
+					datatime: datatime,
+					speed: speed,
+					url: url	
+				};
 			}
 		}
-		setupMap(markers, names, datatimes, speeds, urls);
+		setupMap(info);
 		setupClickItemHandler();
+		session.addListener("serverUpdated", function(){
+			timeFromLastMessage();
+		});
 	});
 }
 
@@ -94,20 +99,47 @@ function convertTime(time){
 	hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 	return formattedTime;
 }
+function timeFromLastMessage(){
+	var items = session.getItems('avl_unit');
+	for (var i = 0; i < items.length; i++) {
+		if (items[i].getLastMessage() != null) {
+			var d = items[i].getLastMessage().t;
+			var serverTime = session.getServerTime();
+			var timeFromLast = serverTime - d;
+			var sec = timeFromLast % 60;
+			var min1 = timeFromLast / 60 | 0; 
+			var h = min1 / 60 | 0;
+			var min = min1 - h*60;
+			var unitId = items[i].getId();
+			var spanLast = 'last' + unitId;
+			var spanLastt = 'lastt' + unitId;
+			document.getElementById(spanLast).innerHTML = h + 'h ' + min + 'm ' + sec + 's ago';
+			document.getElementById(spanLastt).innerHTML = convertTime(d);
+		};
+	}
+}
 
-function setupMap(markers, names, datatimes, speeds, urls){
+function setupMap(info){
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
 	//map.setView([53.906, 27.456], 13);
 	map.addLayer(osm);
 	// markers = [[53.906, 27.456], [53.906, 26.456],[53.306, 26.456]];
-	for (var i = 0; i < markers.length; i++) {
-		var icon = L.icon({iconUrl: urls[i], popupAnchor: [15, 0]});
-		var marker = L.marker(markers[i], {icon: icon}).addTo(map);
-		marker.bindPopup("<b>Name:</b> " + names[i] + "<br><b>Speed:</b> " + speeds[i] +
-			" km/h <br><b>Last:</b> " + datatimes[i]);
-	};
+	var markers = [];
+	for(var id in info){
+		var unit = info[id];
+		markers.push(unit.marker);
+
+		var icon = L.icon({iconUrl: unit.url, popupAnchor: [15, 0]});
+		var marker = L.marker(unit.marker, {icon: icon}).addTo(map);
+		marker.bindPopup("<b>Name:</b> " + unit.name + "<br><b>Speed:</b> " + unit.speed +
+			" km/h <br><b>Last:</b> " + unit.datatime);
+	
+		MARKERS[id] = marker;
+
+
+	}
 	map.fitBounds(markers);
 	// extend(fitBounds);
 }
@@ -124,21 +156,12 @@ function setupClickItemHandler() {
 			map.setView([data.y, data.x], 15);
 		}
 	});
-
 }
-// function fact(a){
-// 	var sum = 1;
-// 	for (var i = 1; i <= a; i++) {
-// 		sum *= i;
-// 	};
-// 	return sum;
-// }
 
 
 //http://trc-api.wialon.com/wialon/ajax.html?svc=core/login&params={%22user%22:%22avin%22,%22password%22:%22123%22}
 //http://trc-api.wialon.com/wialon/ajax.html?sid=c1f48e7956e52331c452f94bcf5e3fb7&svc=core/logout&params={}
-// session.updateDataFlags([{type:'type', data: 'avl_unit', flags:1, mode:0}], function(code){console.log(arguments)})
-// session.getItems('avl_unit')
+
 
 
 
